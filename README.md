@@ -5,7 +5,7 @@
 # ArtGallery.Services
 
 <p align="center">
-  <img width="25%" height="25%" src="https://github.com/Mums-Who-Code/Random.Services/blob/main/artgallery.jpg">
+  <img width="25%" height="25%" src="https://github.com/Mums-Who-Code/ArtGallery.Services/blob/main/artgallery.jpg">
 </p>
 
 # Introduction
