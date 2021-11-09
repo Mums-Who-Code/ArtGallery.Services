@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------
+// Copyright (c) MumsWhoCode. All rights reserved.
+// -----------------------------------------------------------------------
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +20,6 @@ namespace ArtGallery.Services.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
 
             services.AddSwaggerGen(options =>
@@ -28,7 +31,7 @@ namespace ArtGallery.Services.Api
                 };
 
                 options.SwaggerDoc(
-                    name: "v1", 
+                    name: "v1",
                     openInfo);
             });
         }
@@ -41,11 +44,11 @@ namespace ArtGallery.Services.Api
                 app.UseSwagger();
 
                 app.UseSwaggerUI(options =>
-                { 
-                   options.SwaggerEndpoint(
-                       url: "/swagger/v1/swagger.json", 
-                       name: "ArtGallery.Services.Api v1");
-                }
+                {
+                    options.SwaggerEndpoint(
+                        url: "/swagger/v1/swagger.json",
+                        name: "ArtGallery.Services.Api v1");
+                });
             }
 
             app.UseHttpsRedirection();
