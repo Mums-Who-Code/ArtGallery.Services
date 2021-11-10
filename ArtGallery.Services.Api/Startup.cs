@@ -21,6 +21,7 @@ namespace ArtGallery.Services.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddControllers();
             services.AddTransient<IDateTimeBroker, DateTimeBroker>();
 
