@@ -2,13 +2,15 @@
 // Copyright (c) MumsWhoCode. All rights reserved.
 // -----------------------------------------------------------------------
 
+using ArtGallery.Services.Api.Brokers.DateTime;
+using ArtGallery.Services.Api.Brokers.Loggings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using ArtGallery.Services.Api.Brokers.DateTime;
 
 namespace ArtGallery.Services.Api
 {
@@ -22,7 +24,8 @@ namespace ArtGallery.Services.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddTransient<IDateTimeBroker, DateTimeBroker>();
+            services.AddLogging();
+            AddBrokers(services);
 
             services.AddSwaggerGen(options =>
             {
@@ -57,6 +60,13 @@ namespace ArtGallery.Services.Api
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
+        }
+
+        private static void AddBrokers(IServiceCollection services)
+        {
+            services.AddSingleton<IDateTimeBroker, DateTimeBroker>();
+            services.AddSingleton<ILogger, Logger<LoggingBroker>>();
+            services.AddSingleton<ILoggingBroker, LoggingBroker>();
         }
     }
 }
