@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
 namespace ArtGallery.Services.Api
@@ -64,9 +63,8 @@ namespace ArtGallery.Services.Api
 
         private static void AddBrokers(IServiceCollection services)
         {
-            services.AddSingleton<IDateTimeBroker, DateTimeBroker>();
-            services.AddSingleton<ILogger, Logger<LoggingBroker>>();
-            services.AddSingleton<ILoggingBroker, LoggingBroker>();
+            services.AddTransient<IDateTimeBroker, DateTimeBroker>();
+            services.AddTransient<ILoggingBroker, LoggingBroker>();
         }
     }
 }

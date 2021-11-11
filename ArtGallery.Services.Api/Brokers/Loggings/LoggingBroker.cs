@@ -2,8 +2,8 @@
 // Copyright (c) MumsWhoCode. All rights reserved.
 // -----------------------------------------------------------------------
 
-using System;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace ArtGallery.Services.Api.Brokers.Loggings
 {
