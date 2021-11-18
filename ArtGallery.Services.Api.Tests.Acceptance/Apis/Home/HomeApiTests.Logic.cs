@@ -2,8 +2,8 @@
 // Copyright (c) MumsWhoCode. All rights reserved.
 // -----------------------------------------------------------------------
 
-using FluentAssertions;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Xunit;
 
 namespace ArtGallery.Services.Api.Tests.Acceptance.Apis.Home
@@ -23,7 +23,6 @@ namespace ArtGallery.Services.Api.Tests.Acceptance.Apis.Home
 
             //then
             actualHomeMessage.Should().BeEquivalentTo(expectedHomeMessage);
-
         }
     }
 }

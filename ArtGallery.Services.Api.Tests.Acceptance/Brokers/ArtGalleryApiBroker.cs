@@ -2,9 +2,9 @@
 // Copyright (c) MumsWhoCode. All rights reserved.
 // -----------------------------------------------------------------------
 
+using System.Net.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using RESTFulSense.Clients;
-using System.Net.Http;
 
 namespace ArtGallery.Services.Api.Tests.Acceptance.Brokers
 {

@@ -11,6 +11,7 @@ namespace ArtGallery.Services.Api.Tests.Acceptance.Apis.Home
     public partial class HomeApiTests
     {
         private readonly ArtGalleryApiBroker artGalleryApiBroker;
+
         public HomeApiTests(ArtGalleryApiBroker artGalleryApiBroker) =>
             this.artGalleryApiBroker = artGalleryApiBroker;
     }

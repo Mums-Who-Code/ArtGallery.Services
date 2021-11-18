@@ -12,6 +12,5 @@ namespace ArtGallery.Services.Api.Tests.Acceptance.Brokers
 
         public async ValueTask<string> GetHomeMessageAsync() =>
             await this.apiFactoryClient.GetContentStringAsync(HomeRelativeUrl);
-
     }
 }
