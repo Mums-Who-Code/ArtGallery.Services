@@ -8,11 +8,11 @@ using RESTFulSense.Controllers;
 namespace ArtGallery.Services.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]    
+    [Route("api/[controller]")]
     public class HomeController : RESTFulController
     {
         [HttpGet]
         public ActionResult<string> Get() =>
-            Ok("Hello");
+            Ok("Hello! I am ArtGallery Services");
     }
 }
