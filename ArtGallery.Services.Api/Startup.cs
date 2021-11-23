@@ -2,14 +2,14 @@
 // Copyright (c) MumsWhoCode. All rights reserved.
 // -----------------------------------------------------------------------
 
+using ArtGallery.Services.Api.Brokers.DateTime;
+using ArtGallery.Services.Api.Brokers.Loggings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using ArtGallery.Services.Api.Brokers.DateTime;
-using ArtGallery.Services.Api.Brokers.Loggings;
 
 namespace ArtGallery.Services.Api
 {
