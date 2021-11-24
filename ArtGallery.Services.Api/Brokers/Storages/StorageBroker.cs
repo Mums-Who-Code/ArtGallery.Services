@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace ArtGallery.Services.Api.Brokers.Storages
 {
-    public class StorageBroker: EFxceptionsContext, IStorageBroker
+    public class StorageBroker : EFxceptionsContext, IStorageBroker
     {
         private IConfiguration configuration; public StorageBroker(IConfiguration configuration)
         {
