@@ -4,6 +4,7 @@
 
 using ArtGallery.Services.Api.Brokers.DateTime;
 using ArtGallery.Services.Api.Brokers.Loggings;
+using ArtGallery.Services.Api.Brokers.Storages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -65,6 +66,7 @@ namespace ArtGallery.Services.Api
         {
             services.AddTransient<IDateTimeBroker, DateTimeBroker>();
             services.AddTransient<ILoggingBroker, LoggingBroker>();
+            services.AddTransient<IStorageBroker, StorageBroker>();
         }
     }
 }
