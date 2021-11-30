@@ -2,6 +2,7 @@
 // Copyright (c) MumsWhoCode. All rights reserved.
 // -----------------------------------------------------------------------
 
+using System;
 using ArtGallery.Services.Api.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +14,7 @@ namespace ArtGallery.Services.Api.Brokers.Storages
         {
             var serviceAdminUser = new User
             {
-                Id = System.Guid.Parse("c3a817cb-1528-4e30-81c0-389297978dc8"),
+                Id = Guid.Parse("c3a817cb-1528-4e30-81c0-389297978dc8"),
                 Name = "Admin"
             };
 
