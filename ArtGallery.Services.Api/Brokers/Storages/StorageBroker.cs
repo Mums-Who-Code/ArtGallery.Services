@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace ArtGallery.Services.Api.Brokers.Storages
 {
-    public class StorageBroker : EFxceptionsContext, IStorageBroker
+    public partial class StorageBroker : EFxceptionsContext, IStorageBroker
     {
         private IConfiguration configuration; public StorageBroker(IConfiguration configuration)
         {
@@ -16,9 +16,12 @@ namespace ArtGallery.Services.Api.Brokers.Storages
             this.Database.Migrate();
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder) =>
+            SeedUsers(modelBuilder);
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = this.configuration.GetConnectionString("DefaultConnection");
+            string connectionString = this.configuration.GetConnectionString(name: "DefaultConnection");
             optionsBuilder.UseSqlServer(connectionString);
         }
     }
