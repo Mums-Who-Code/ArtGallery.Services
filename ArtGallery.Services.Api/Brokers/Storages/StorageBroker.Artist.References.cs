@@ -11,17 +11,16 @@ namespace ArtGallery.Services.Api.Brokers.Storages
     {
         private static void SetArtistReferences(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Artist>();
             modelBuilder.Entity<Artist>()
-                .HasOne(Artist => Artist.CreatedByUser)
-                .WithMany(User => User.CreatedArtists)
-                .HasForeignKey(Artist => Artist.CreatedBy)
+                .HasOne(artist => artist.CreatedByUser)
+                .WithMany(user => user.CreatedArtists)
+                .HasForeignKey(artist => artist.CreatedBy)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Artist>()
-                .HasOne(Artist => Artist.UpdatedByUser)
-                .WithMany(User => User.UpdatedArtists)
-                .HasForeignKey(Artist => Artist.UpdatedBy)
+                .HasOne(artist => artist.UpdatedByUser)
+                .WithMany(user => user.UpdatedArtists)
+                .HasForeignKey(artist => artist.UpdatedBy)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

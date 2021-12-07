@@ -4,8 +4,8 @@
 
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using ArtGallery.Services.Api.Models.Artists;
+using Newtonsoft.Json;
 
 namespace ArtGallery.Services.Api.Models.Users
 {
