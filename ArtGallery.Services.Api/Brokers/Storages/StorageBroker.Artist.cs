@@ -13,7 +13,7 @@ namespace ArtGallery.Services.Api.Brokers.Storages
     {
         DbSet<Artist> Artists { get; set; }
 
-        public async ValueTask<Artist> InsertCategoryAsync(Artist artist)
+        public async ValueTask<Artist> InsertArtistAsync(Artist artist)
         {
             using var broker = new StorageBroker(this.configuration);
 
