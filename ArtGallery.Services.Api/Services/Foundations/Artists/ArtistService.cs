@@ -15,7 +15,7 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
         public ArtistService(IStorageBroker storageBroker) =>
             this.storageBroker = storageBroker;
 
-        public ValueTask<Artist> AddArtistAsync(Artist artist) =>
-            throw new System.NotImplementedException();
+        public async ValueTask<Artist> AddArtistAsync(Artist artist) =>
+            await this.storageBroker.InsertArtistAsync(artist);
     }
 }
