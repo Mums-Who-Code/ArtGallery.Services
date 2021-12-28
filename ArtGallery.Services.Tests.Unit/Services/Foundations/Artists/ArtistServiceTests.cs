@@ -3,6 +3,9 @@
 // -----------------------------------------------------------------------
 
 using System;
+using System.Linq.Expressions;
+using ArtGallery.Services.Api.Brokers.DateTime;
+using ArtGallery.Services.Api.Brokers.Loggings;
 using ArtGallery.Services.Api.Brokers.Storages;
 using ArtGallery.Services.Api.Models.Artists;
 using ArtGallery.Services.Api.Services.Foundations.Artists;
@@ -14,6 +17,8 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
     public partial class ArtistServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
+        private readonly Mock<ILoggingBroker> loggingBrokerMock;
+        private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly IArtistService aristService;
 
         public ArtistServiceTests()
@@ -38,6 +43,13 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
                 .OnType<DateTimeOffset>().Use(dateTime);
 
             return filler;
+        }
+
+        private static Expression<Func<Exception, bool>> SameExceptionAs(Exception expectedException)
+        {
+            return actualException =>
+                actualException.Message == expectedException.Message
+                && actualException.InnerException.Message == expectedException.InnerException.Message;
         }
     }
 }
