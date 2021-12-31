@@ -11,6 +11,7 @@ using ArtGallery.Services.Api.Models.Artists;
 using ArtGallery.Services.Api.Services.Foundations.Artists;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 {
@@ -35,6 +36,13 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
         private static Artist CreateRandomArtist() =>
             CreateArtistFiller(dateTime: GetRandomDateTime()).Create();
 
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Exception expectedException)
+        {
+            return actualException =>
+                actualException.Message == expectedException.Message
+                && actualException.InnerException.Message == expectedException.InnerException.Message;
+        }
+
         private static Filler<Artist> CreateArtistFiller(DateTimeOffset dateTime)
         {
             var filler = new Filler<Artist>();
@@ -43,13 +51,6 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
                 .OnType<DateTimeOffset>().Use(dateTime);
 
             return filler;
-        }
-
-        private static Expression<Func<Exception, bool>> SameExceptionAs(Exception expectedException)
-        {
-            return actualException =>
-                actualException.Message == expectedException.Message
-                && actualException.InnerException.Message == expectedException.InnerException.Message;
         }
     }
 }
