@@ -25,9 +25,11 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
         public ArtistServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
+            this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
             this.aristService = new ArtistService(
-                storageBroker: this.storageBrokerMock.Object);
+                storageBroker: this.storageBrokerMock.Object,
+                loggingBroker: this.loggingBrokerMock.Object);
         }
 
         private static DateTimeOffset GetRandomDateTime() =>
