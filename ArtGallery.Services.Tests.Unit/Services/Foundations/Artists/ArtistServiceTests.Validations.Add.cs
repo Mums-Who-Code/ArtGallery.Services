@@ -2,7 +2,6 @@
 // Copyright (c) MumsWhoCode. All rights reserved.
 // -----------------------------------------------------------------------
 
-using System;
 using System.Threading.Tasks;
 using ArtGallery.Services.Api.Models.Artists;
 using ArtGallery.Services.Api.Models.Artists.Exceptions;
@@ -44,15 +43,52 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
 
-        [Fact]
-        public async Task ShouldThrowValidationExceptionOnAddIfIdIsInvalidAndLogItAsync()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("  ")]
+        public async Task ShouldThrowValidationExceptionOnAddIfArtistIsInvalidAndLogItAsync(
+            string invalidText)
         {
             //given
-            Guid invalidGuid = Guid.Empty;
-            Artist randomArtist = CreateRandomArtist();
-            Artist invalidArtist = randomArtist;
-            invalidArtist.Id = invalidGuid;
+            var invalidArtist = new Artist
+            {
+                FirstName = invalidText,
+                LastName = invalidText,
+                Email = invalidText,
+                ContactNumber = invalidText,
+                Status = ArtistStatus.InActive
+            };
+
             var invalidArtistException = new InvalidArtistException();
+
+            invalidArtistException.AddData(
+                key: nameof(Artist.Id),
+                values: "Id is required.");
+
+            invalidArtistException.AddData(
+                key: nameof(Artist.FirstName),
+                values: "Text is required.");
+
+            invalidArtistException.AddData(
+                key: nameof(Artist.LastName),
+                values: "Text is required.");
+
+            invalidArtistException.AddData(
+                key: nameof(Artist.Email),
+                values: "Text is required.");
+
+            invalidArtistException.AddData(
+                key: nameof(Artist.ContactNumber),
+                values: "Text is required.");
+
+            invalidArtistException.AddData(
+               key: nameof(Artist.CreatedBy),
+               values: "Id is required.");
+
+            invalidArtistException.AddData(
+               key: nameof(Artist.CreatedDate),
+               values: "Date is required.");
 
             var expectedArtistValidationException =
                new ArtistValidationException(invalidArtistException);
