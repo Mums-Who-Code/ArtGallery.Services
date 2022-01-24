@@ -3,7 +3,6 @@
 // -----------------------------------------------------------------------
 
 using System;
-using System.Text.RegularExpressions;
 using ArtGallery.Services.Api.Models.Artists;
 using ArtGallery.Services.Api.Models.Artists.Exceptions;
 

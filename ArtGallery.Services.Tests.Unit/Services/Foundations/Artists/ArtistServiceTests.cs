@@ -12,6 +12,7 @@ using ArtGallery.Services.Api.Services.Foundations.Artists;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
+using Xunit;
 
 namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 {
@@ -32,8 +33,31 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
+        public static TheoryData InvalidEmails()
+        {
+            string randomString = GetRandomString();
+            string letterString = randomString;
+            string characterString = $"\n\r\b{randomString}^8&";
+            string domainString = $"{randomString}.com";
+            string incompleteEmailString = $"{randomString}@{randomString}";
+
+            return new TheoryData<string>
+            {
+                null,
+                "",
+                "  ",
+                letterString,
+                characterString,
+                domainString,
+                incompleteEmailString
+            };
+        }
+
         private static DateTimeOffset GetRandomDateTime() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
+
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
 
         private static Artist CreateRandomArtist() =>
             CreateArtistFiller(dateTime: GetRandomDateTime()).Create();
