@@ -19,8 +19,8 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
                 (Rule: IsInvalid(artist.Id), Parameter: nameof(Artist.Id)),
                 (Rule: IsInvalid(text: artist.FirstName), Parameter: nameof(Artist.FirstName)),
                 (Rule: IsInvalid(text: artist.LastName), Parameter: nameof(Artist.LastName)),
-                (Rule: IsInvalidEmail(emailAddress: artist.Email), Parameter: nameof(Artist.Email)),
-                (Rule: IsInvalidNumber(artist.ContactNumber), Parameter: nameof(Artist.ContactNumber)),
+                (Rule: IsInvalid(text: artist.Email), Parameter: nameof(Artist.Email)),
+                (Rule: IsInvalid(text: artist.ContactNumber), Parameter: nameof(Artist.ContactNumber)),
                 (Rule: IsInvalid(artist.Status), Parameter: nameof(Artist.Status)),
                 (Rule: IsInvalid(id: artist.CreatedBy), Parameter: nameof(Artist.CreatedBy)),
                 (Rule: IsInvalid(id: artist.UpdatedBy), Parameter: nameof(Artist.UpdatedBy)),
@@ -59,60 +59,6 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
             Condition = date == default,
             Message = "Date is required."
         };
-
-        private static bool HasNoValue(string number) =>
-            String.IsNullOrWhiteSpace(number);
-
-        private static dynamic IsInvalidNumber(string number) => new
-        {
-            Condition = IsInvalidContactNumber(number),
-            Message = "Text is invalid."
-        };
-
-        private static bool IsInvalidContactNumber(string number)
-        {
-            bool isInvalid = HasNoValue(number);
-
-            if (isInvalid is not true)
-            {
-                return !IsValidContactNumberFormat(number);
-            }
-
-            return isInvalid;
-        }
-
-        private static bool IsValidContactNumberFormat(string number)
-        {
-            return Regex.IsMatch(
-                input: number,
-                pattern: @"^[0-9]{10}$");
-        }
-
-        private static dynamic IsInvalidEmail(string emailAddress) => new
-        {
-            Condition = IsInvalidEmailFormat(emailAddress),
-            Message = "Text is invalid."
-        };
-
-        private static bool IsInvalidEmailFormat(string emailAddress)
-        {
-            bool isInvalid = HasNoValue(emailAddress);
-
-            if (isInvalid is not true)
-            {
-                return !IsValidEmailFormat(emailAddress);
-            }
-
-            return isInvalid;
-        }
-
-        private static bool IsValidEmailFormat(string emailAddress)
-        {
-            return Regex.IsMatch(
-                input: emailAddress,
-                pattern: @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}",
-                options: RegexOptions.IgnoreCase);
-        }
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {

@@ -55,8 +55,6 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             {
                 FirstName = invalidText,
                 LastName = invalidText,
-                Email = invalidText,
-                ContactNumber = invalidText,
                 Status = ArtistStatus.InActive
             };
 
@@ -72,14 +70,6 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             invalidArtistException.AddData(
                 key: nameof(Artist.LastName),
-                values: "Text is required.");
-
-            invalidArtistException.AddData(
-                key: nameof(Artist.Email),
-                values: "Text is invalid.");
-
-            invalidArtistException.AddData(
-                key: nameof(Artist.ContactNumber),
                 values: "Text is required.");
 
             invalidArtistException.AddData(
