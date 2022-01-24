@@ -23,6 +23,10 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
             {
                 throw CreateAndLogValidationException(nullArtistException);
             }
+            catch (InvalidArtistException invalidArtistException)
+            {
+                throw CreateAndLogValidationException(invalidArtistException);
+            }
         }
 
         private ArtistValidationException CreateAndLogValidationException(Xeption exception)
