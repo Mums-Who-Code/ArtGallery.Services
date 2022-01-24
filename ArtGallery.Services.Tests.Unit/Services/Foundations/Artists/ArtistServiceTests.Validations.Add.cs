@@ -76,18 +76,30 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             invalidArtistException.AddData(
                 key: nameof(Artist.Email),
-                values: "Text is required.");
+                values: "Text is invalid.");
 
             invalidArtistException.AddData(
                 key: nameof(Artist.ContactNumber),
                 values: "Text is required.");
 
             invalidArtistException.AddData(
+                key: nameof(Artist.Status),
+                values: "Value is invalid.");
+
+            invalidArtistException.AddData(
                key: nameof(Artist.CreatedBy),
                values: "Id is required.");
 
             invalidArtistException.AddData(
+               key: nameof(Artist.UpdatedBy),
+               values: "Id is required.");
+
+            invalidArtistException.AddData(
                key: nameof(Artist.CreatedDate),
+               values: "Date is required.");
+
+            invalidArtistException.AddData(
+               key: nameof(Artist.UpdatedDate),
                values: "Date is required.");
 
             var expectedArtistValidationException =
@@ -102,8 +114,8 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
                 addArtistTask.AsTask());
 
             this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(It.Is(
-                    SameExceptionAs(expectedArtistValidationException))),
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedArtistValidationException))),
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
