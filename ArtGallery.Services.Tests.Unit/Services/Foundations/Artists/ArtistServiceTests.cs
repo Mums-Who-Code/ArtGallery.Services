@@ -53,6 +53,19 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             };
         }
 
+        public static TheoryData InvalidContactNumbers()
+        {
+            string randomString = GetRandomString();
+
+            return new TheoryData<string>
+            {
+                null,
+                "",
+                "  ",
+                randomString
+            };
+        }
+
         private static DateTimeOffset GetRandomDateTime() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
 

@@ -46,7 +46,7 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
         private static dynamic IsInvalid(string text) => new
         {
             Condition = String.IsNullOrWhiteSpace(text),
-            Message = "Id is required"
+            Message = "Text is required"
         };
 
         private static dynamic IsInvalid(ArtistStatus status) => new
