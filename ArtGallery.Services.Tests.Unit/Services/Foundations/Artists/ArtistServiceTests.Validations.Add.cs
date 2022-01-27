@@ -234,5 +234,43 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnAddIfCreatedDateIsNotSameAsUpdatedDateAndLogItAsync()
+        {
+            //given
+            Artist randomArtist = CreateRandomArtist();
+            Artist invalidArtist = randomArtist;
+            invalidArtist.UpdatedDate = invalidArtist.CreatedDate.AddDays(1);
+
+            var invalidArtistException = new InvalidArtistException();
+
+            invalidArtistException.AddData(
+                key: nameof(Artist.CreatedDate),
+                values: $"Date is not same as {nameof(Artist.UpdatedDate)}.");
+
+            var expectedArtistValidationException =
+                new ArtistValidationException(invalidArtistException);
+
+            //when
+            ValueTask<Artist> addArtistTask =
+                this.artistService.AddArtistAsync(invalidArtist);
+
+            //then
+            await Assert.ThrowsAsync<ArtistValidationException>(() =>
+                addArtistTask.AsTask());
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedArtistValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertArtistAsync(It.IsAny<Artist>()),
+                    Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
