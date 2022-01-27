@@ -21,14 +21,14 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
         private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
-        private readonly IArtistService aristService;
+        private readonly IArtistService artistService;
 
         public ArtistServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
-            this.aristService = new ArtistService(
+            this.artistService = new ArtistService(
                 storageBroker: this.storageBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }

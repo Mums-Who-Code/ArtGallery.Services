@@ -2,6 +2,7 @@
 // Copyright (c) MumsWhoCode. All rights reserved.
 // -----------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using ArtGallery.Services.Api.Models.Artists;
 using ArtGallery.Services.Api.Models.Artists.Exceptions;
@@ -24,7 +25,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             //when
             ValueTask<Artist> addArtistTask =
-                this.aristService.AddArtistAsync(nullArtist);
+                this.artistService.AddArtistAsync(nullArtist);
 
             //then
             await Assert.ThrowsAsync<ArtistValidationException>(() =>
@@ -97,7 +98,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             //when
             ValueTask<Artist> addArtistTask =
-                this.aristService.AddArtistAsync(invalidArtist);
+                this.artistService.AddArtistAsync(invalidArtist);
 
             //then
             await Assert.ThrowsAsync<ArtistValidationException>(() =>
@@ -137,7 +138,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             //when
             ValueTask<Artist> addArtistTask =
-                this.aristService.AddArtistAsync(invalidArtist);
+                this.artistService.AddArtistAsync(invalidArtist);
 
             //then
             await Assert.ThrowsAsync<ArtistValidationException>(() =>
@@ -159,12 +160,12 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
         [Theory]
         [MemberData(nameof(InvalidContactNumbers))]
         public async Task ShouldThrowValidationExceptionOnAddIfContactNumberIsInvalidAndLogItAsync(
-            string InvalidContactNumbers)
+            string invalidContactNumber)
         {
             //given
             Artist randomArtist = CreateRandomArtist();
             Artist invalidArtist = randomArtist;
-            invalidArtist.ContactNumber = InvalidContactNumbers;
+            invalidArtist.ContactNumber = invalidContactNumber;
 
             var invalidArtistException = new InvalidArtistException();
 
@@ -177,9 +178,47 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             //when
             ValueTask<Artist> addArtistTask =
-                this.aristService.AddArtistAsync(invalidArtist);
+                this.artistService.AddArtistAsync(invalidArtist);
 
             //then
+            await Assert.ThrowsAsync<ArtistValidationException>(() =>
+                addArtistTask.AsTask());
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedArtistValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertArtistAsync(It.IsAny<Artist>()),
+                    Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnAddIfCreatedByNotSameAsUpdatedByAndLogItAsync()
+        {
+            // given
+            Artist randomArtist = CreateRandomArtist();
+            Artist invalidArtist = randomArtist;
+            invalidArtist.CreatedBy = Guid.NewGuid();
+
+            var invalidArtistException = new InvalidArtistException();
+
+            invalidArtistException.AddData(
+                key: nameof(Artist.CreatedBy),
+                values: $"Id is not same as {nameof(Artist.UpdatedBy)}");
+
+            var expectedArtistValidationException =
+                new ArtistValidationException(invalidArtistException);
+
+            // when
+            ValueTask<Artist> addArtistTask =
+                this.artistService.AddArtistAsync(invalidArtist);
+
+            // then
             await Assert.ThrowsAsync<ArtistValidationException>(() =>
                 addArtistTask.AsTask());
 

@@ -28,7 +28,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             //when
             Artist actualArtist =
-                await this.aristService.AddArtistAsync(inputArtist);
+                await this.artistService.AddArtistAsync(inputArtist);
 
             //then
             actualArtist.Should().BeEquivalentTo(expectedArtist);
