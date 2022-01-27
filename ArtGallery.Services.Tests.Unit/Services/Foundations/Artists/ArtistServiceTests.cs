@@ -4,7 +4,6 @@
 
 using System;
 using System.Linq.Expressions;
-using ArtGallery.Services.Api.Brokers.DateTime;
 using ArtGallery.Services.Api.Brokers.Loggings;
 using ArtGallery.Services.Api.Brokers.Storages;
 using ArtGallery.Services.Api.Models.Artists;
@@ -20,7 +19,6 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
-        private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly IArtistService artistService;
 
         public ArtistServiceTests()
