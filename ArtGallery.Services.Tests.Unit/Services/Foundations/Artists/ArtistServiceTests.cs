@@ -89,11 +89,15 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
         private static Filler<Artist> CreateArtistFiller(DateTimeOffset dateTime)
         {
             var filler = new Filler<Artist>();
+            Guid userId = Guid.NewGuid();
 
             filler.Setup()
                 .OnProperty(artist => artist.Email).Use(GetRandomEmail())
                 .OnProperty(artist => artist.ContactNumber).Use(GetRandomContactNumber())
                 .OnProperty(artist => artist.Status).Use(ArtistStatus.Active)
+                .OnType<Guid>().Use(userId)
+                .OnProperty(artist => artist.CreatedByUser).IgnoreIt()
+                .OnProperty(artist => artist.UpdatedByUser).IgnoreIt()
                 .OnType<DateTimeOffset>().Use(dateTime);
 
             return filler;
