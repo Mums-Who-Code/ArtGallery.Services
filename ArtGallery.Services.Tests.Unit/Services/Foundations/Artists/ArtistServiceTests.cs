@@ -75,12 +75,8 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
         private static string GetRandomEmail() =>
            new EmailAddresses().GetValue().ToString();
 
-        private static ArtistStatus GetRandomStatus()
-        {
-            ArtistStatus Status = ArtistStatus.Active;
-
-            return Status;
-        }
+        private static string GetRandomContactNumber() =>
+            new LongRange(min: 1000000000, max: 9999999999).GetValue().ToString();
 
         private static Artist CreateRandomArtist() =>
             CreateArtistFiller(dateTime: GetRandomDateTime()).Create();
@@ -98,7 +94,8 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             filler.Setup()
                 .OnProperty(artist => artist.Email).Use(GetRandomEmail())
-                .OnProperty(artist => artist.Status).Use(GetRandomStatus())
+                .OnProperty(artist => artist.ContactNumber).Use(GetRandomContactNumber())
+                .OnProperty(artist => artist.Status).Use(ArtistStatus.Active)
                 .OnType<DateTimeOffset>().Use(dateTime);
 
             return filler;
