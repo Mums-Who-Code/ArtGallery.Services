@@ -21,7 +21,7 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
                 (Rule: IsInvalid(text: artist.LastName), Parameter: nameof(Artist.LastName)),
                 (Rule: IsInvalid(text: artist.Email), Parameter: nameof(Artist.Email)),
                 (Rule: IsInvalidEmail(emailAddress: artist.Email), Parameter: nameof(Artist.Email)),
-                (Rule: IsInvalid(text: artist.ContactNumber), Parameter: nameof(Artist.ContactNumber)),
+                (Rule: IsInvalidContactNumber(artist.ContactNumber), Parameter: nameof(Artist.ContactNumber)),
                 (Rule: IsInvalid(artist.Status), Parameter: nameof(Artist.Status)),
                 (Rule: IsInvalid(id: artist.CreatedBy), Parameter: nameof(Artist.CreatedBy)),
                 (Rule: IsInvalid(id: artist.UpdatedBy), Parameter: nameof(Artist.UpdatedBy)),
@@ -67,6 +67,12 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
             Message = "Text is invalid."
         };
 
+        private static dynamic IsInvalidContactNumber(string number) => new
+        {
+            Condition = IsInvalidContactNumberFormat(number),
+            Message = "Value is invalid."
+        };
+
         private static bool HasNoValue(string number) =>
            String.IsNullOrWhiteSpace(number);
 
@@ -80,6 +86,26 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
             }
 
             return isInvalid;
+        }
+
+        private static bool IsInvalidContactNumberFormat(string contactNumber)
+        {
+            bool isInvalid = HasNoValue(contactNumber);
+
+            if (isInvalid is not true)
+            {
+                return !IsValidContactNumberFormat(contactNumber);
+            }
+
+            return isInvalid;
+        }
+
+        private static bool IsValidContactNumberFormat(string contactNumber)
+        {
+            return Regex.IsMatch(
+                input: contactNumber,
+                pattern: @"[0-9]{10}",
+                options: RegexOptions.IgnoreCase);
         }
 
         private static bool IsValidEmailFormat(string emailAddress)
