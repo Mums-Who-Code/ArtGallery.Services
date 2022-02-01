@@ -272,5 +272,59 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [MemberData(nameof(InvalidMinuteCases))]
+        public async Task ShouldThrowValidationExceptionOnAddIfCreateDateIsNotRecentAndLogItAsync(
+            int invalidMinuteCase)
+        {
+            // given
+            DateTimeOffset dateTime = GetRandomDateTime();
+            Artist randomArtist = CreateRandomArtist(dateTime);
+            Artist invalidArtist = randomArtist;
+
+            invalidArtist.CreatedDate =
+                invalidArtist.CreatedDate.AddMinutes(invalidMinuteCase);
+
+            var invalidArtistException =
+                new InvalidArtistException();
+
+            invalidArtistException.AddData(
+                key: nameof(Artist.CreatedDate),
+                values: "Date is not recent.");
+
+            var expectedArtistValidationException =
+                new ArtistValidationException(
+                    invalidArtistException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(dateTime);
+
+            // when
+            ValueTask<Artist> addArtistTask =
+                this.artistService.AddArtistAsync(invalidArtist);
+
+            // then
+            await Assert.ThrowsAsync<ArtistValidationException>(() =>
+                addArtistTask.AsTask());
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedArtistValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertArtistAsync(It.IsAny<Artist>()),
+                    Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }

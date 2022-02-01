@@ -4,6 +4,7 @@
 
 using System;
 using System.Linq.Expressions;
+using ArtGallery.Services.Api.Brokers.DateTime;
 using ArtGallery.Services.Api.Brokers.Loggings;
 using ArtGallery.Services.Api.Brokers.Storages;
 using ArtGallery.Services.Api.Models.Artists;
@@ -19,16 +20,19 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
+        private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly IArtistService artistService;
 
         public ArtistServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
+            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
 
             this.artistService = new ArtistService(
                 storageBroker: this.storageBrokerMock.Object,
-                loggingBroker: this.loggingBrokerMock.Object);
+                loggingBroker: this.loggingBrokerMock.Object,
+                dateTimeBroker: this.dateTimeBrokerMock.Object);
         }
 
         public static TheoryData InvalidEmails()
@@ -64,6 +68,24 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             };
         }
 
+        public static TheoryData<int> InvalidMinuteCases()
+        {
+            int invalidMinutesFromNow = GetRandomNumber();
+            int invalidMinutesFromPast = GetNegativeRandomNumber();
+
+            return new TheoryData<int>
+            {
+                invalidMinutesFromNow,
+                invalidMinutesFromPast
+            };
+        }
+
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 10).GetValue();
+
+        private static int GetNegativeRandomNumber() =>
+            -1 * GetRandomNumber();
+
         private static DateTimeOffset GetRandomDateTime() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
 
@@ -78,6 +100,9 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
         private static Artist CreateRandomArtist() =>
             CreateArtistFiller(dateTime: GetRandomDateTime()).Create();
+
+        private static Artist CreateRandomArtist(DateTimeOffset dateTime) =>
+            CreateArtistFiller(dateTime).Create();
 
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Exception expectedException)
         {
