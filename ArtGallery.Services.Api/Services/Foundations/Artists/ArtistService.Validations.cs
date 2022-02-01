@@ -32,7 +32,13 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
                     firstId: artist.UpdatedBy,
                     secondId: artist.CreatedBy,
                     secondIdName: nameof(artist.CreatedBy)),
-                Parameter: nameof(Artist.UpdatedBy)));
+                Parameter: nameof(Artist.UpdatedBy)),
+
+                (Rule: IsNotSame(
+                    firstDate: artist.CreatedDate,
+                    secondDate: artist.UpdatedDate,
+                    secondDateName: nameof(Artist.UpdatedDate)),
+                Parameter: nameof(Artist.CreatedDate)));
         }
 
         private static void ValidateArtistIsNotNull(Artist artist)
@@ -129,6 +135,15 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
             {
                 Condition = firstId != secondId,
                 Message = $"Id is not same as {secondIdName}."
+            };
+
+        private static dynamic IsNotSame(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not same as {secondDateName}."
             };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
