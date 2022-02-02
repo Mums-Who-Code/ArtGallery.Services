@@ -2,6 +2,7 @@
 // Copyright (c) MumsWhoCode. All rights reserved.
 // -----------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using ArtGallery.Services.Api.Models.Artists;
 using FluentAssertions;
@@ -17,10 +18,16 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
         public async Task ShouldAddArtistAsync()
         {
             //given
-            Artist randomArtist = CreateRandomArtist();
+            DateTimeOffset randomDateTime = GetRandomDateTime();
+
+            Artist randomArtist = CreateRandomArtist(randomDateTime);
             Artist inputArtist = randomArtist;
             Artist persistedArtist = inputArtist;
             Artist expectedArtist = persistedArtist.DeepClone();
+
+            this.dateTimeBrokerMock.Setup(broker =>
+               broker.GetCurrentDateTime())
+                   .Returns(randomDateTime);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertArtistAsync(inputArtist))
@@ -33,10 +40,15 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             //then
             actualArtist.Should().BeEquivalentTo(expectedArtist);
 
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertArtistAsync(inputArtist),
                     Times.Once);
 
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
     }

@@ -49,6 +49,8 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
             {
                 throw new NullArtistException();
             }
+            else
+                return;
         }
 
         private static dynamic IsInvalid(Guid id) => new
