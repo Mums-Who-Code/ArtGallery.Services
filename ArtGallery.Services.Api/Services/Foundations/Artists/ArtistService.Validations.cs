@@ -11,7 +11,7 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
 {
     public partial class ArtistService
     {
-        private static void ValidateInput(Artist artist)
+        private void ValidateInput(Artist artist)
         {
             ValidateArtistIsNotNull(artist);
 
@@ -38,7 +38,9 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
                     firstDate: artist.CreatedDate,
                     secondDate: artist.UpdatedDate,
                     secondDateName: nameof(Artist.UpdatedDate)),
-                Parameter: nameof(Artist.CreatedDate)));
+                Parameter: nameof(Artist.CreatedDate)),
+
+                 (Rule: IsNotRecent(artist.CreatedDate), Parameter: nameof(Artist.CreatedDate)));
         }
 
         private static void ValidateArtistIsNotNull(Artist artist)
@@ -146,7 +148,24 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
                 Message = $"Date is not same as {secondDateName}."
             };
 
-        private static void Validate(params (dynamic Rule, string Parameter)[] validations)
+        private dynamic IsNotRecent(DateTimeOffset date) => new
+        {
+            Condition = IsDateNotRecent(date),
+            Message = "Date is not recent."
+        };
+
+        private bool IsDateNotRecent(DateTimeOffset date)
+        {
+            DateTimeOffset currentDateTime =
+                this.dateTimeBroker.GetCurrentDateTime();
+
+            TimeSpan timeDifference = currentDateTime.Subtract(date);
+            TimeSpan oneMinute = TimeSpan.FromMinutes(1);
+
+            return timeDifference.Duration() > oneMinute;
+        }
+
+        private void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
             var invalidArtistException = new InvalidArtistException();
 

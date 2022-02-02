@@ -286,6 +286,8 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             invalidArtist.CreatedDate =
                 invalidArtist.CreatedDate.AddMinutes(invalidMinuteCase);
 
+            invalidArtist.UpdatedDate = invalidArtist.CreatedDate;
+
             var invalidArtistException =
                 new InvalidArtistException();
 
@@ -320,7 +322,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertArtistAsync(It.IsAny<Artist>()),
-                    Times.Once);
+                    Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
