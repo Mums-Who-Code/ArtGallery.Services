@@ -54,7 +54,6 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
-
         }
     }
 }
