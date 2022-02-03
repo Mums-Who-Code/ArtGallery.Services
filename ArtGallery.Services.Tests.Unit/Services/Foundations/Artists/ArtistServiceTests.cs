@@ -4,11 +4,13 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Runtime.Serialization;
 using ArtGallery.Services.Api.Brokers.DateTime;
 using ArtGallery.Services.Api.Brokers.Loggings;
 using ArtGallery.Services.Api.Brokers.Storages;
 using ArtGallery.Services.Api.Models.Artists;
 using ArtGallery.Services.Api.Services.Foundations.Artists;
+using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
@@ -103,6 +105,9 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
         private static Artist CreateRandomArtist(DateTimeOffset dateTime) =>
             CreateArtistFiller(dateTime).Create();
+
+        private static SqlException GetSqlException() =>
+            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Exception expectedException)
         {
