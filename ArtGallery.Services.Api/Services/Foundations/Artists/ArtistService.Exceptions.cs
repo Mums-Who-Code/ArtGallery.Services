@@ -5,6 +5,7 @@
 using System.Threading.Tasks;
 using ArtGallery.Services.Api.Models.Artists;
 using ArtGallery.Services.Api.Models.Artists.Exceptions;
+using Microsoft.Data.SqlClient;
 using Xeptions;
 
 namespace ArtGallery.Services.Api.Services.Foundations.Artists
@@ -27,6 +28,14 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
             {
                 throw CreateAndLogValidationException(invalidArtistException);
             }
+            catch(SqlException sqlException)
+            {
+                var failedArtistStorageException =
+                    new FailedArtistStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(
+                    failedArtistStorageException);
+            }
         }
 
         private ArtistValidationException CreateAndLogValidationException(Xeption exception)
@@ -35,6 +44,14 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
             this.loggingBroker.LogError(artistValidationException);
 
             return artistValidationException;
+        }
+
+        private ArtistDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
+        {
+            var artistDependencyException = new ArtistDependencyException(exception);
+            this.loggingBroker.LogCritical(artistDependencyException);
+
+            return artistDependencyException;
         }
     }
 }
