@@ -94,6 +94,9 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
+        private static string GetRandomMessage() =>
+           new MnemonicString(wordCount: GetRandomNumber()).GetValue();
+
         private static string GetRandomEmail() =>
            new EmailAddresses().GetValue().ToString();
 
