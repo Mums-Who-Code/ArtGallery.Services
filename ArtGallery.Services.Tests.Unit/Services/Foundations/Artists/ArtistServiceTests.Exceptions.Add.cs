@@ -2,9 +2,11 @@
 // Copyright (c) MumsWhoCode. All rights reserved.
 // -----------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using ArtGallery.Services.Api.Models.Artists;
 using ArtGallery.Services.Api.Models.Artists.Exceptions;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Moq;
 using Xunit;
@@ -49,6 +51,53 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertArtistAsync(It.IsAny<Artist>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async void ShouldThrowDependencyValidationExceptionOnAddIfArtistAlreadyExistsAndLogItAsync()
+        {
+            // given
+            DateTimeOffset dateTime = GetRandomDateTime();
+            Artist randomArtist = CreateRandomArtist(dateTime);
+            Artist alreadyExistsArtist = randomArtist;
+            string randomMessage = GetRandomString();
+            string exceptionMessage = randomMessage;
+            var duplicateKeyException = new DuplicateKeyException(exceptionMessage);
+
+            var alreadyExistsArtistException =
+                new AlreadyExistsArtistException(duplicateKeyException);
+
+            var expectedArtistDepdendencyValidationException =
+                new ArtistDependencyValidationException(alreadyExistsArtistException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Throws(duplicateKeyException);
+
+            // when
+            ValueTask<Artist> addArtistTask =
+                this.artistService.AddArtistAsync(alreadyExistsArtist);
+
+            // then
+            await Assert.ThrowsAsync<ArtistDependencyValidationException>(() =>
+                addArtistTask.AsTask());
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+               broker.LogError(It.Is(SameExceptionAs(
+                   expectedArtistDepdendencyValidationException))),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertArtistAsync(alreadyExistsArtist),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();

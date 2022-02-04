@@ -28,7 +28,7 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
             {
                 throw CreateAndLogValidationException(invalidArtistException);
             }
-            catch(SqlException sqlException)
+            catch (SqlException sqlException)
             {
                 var failedArtistStorageException =
                     new FailedArtistStorageException(sqlException);
