@@ -5,6 +5,7 @@
 using System.Threading.Tasks;
 using ArtGallery.Services.Api.Models.Artists;
 using ArtGallery.Services.Api.Models.Artists.Exceptions;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Xeptions;
 
@@ -36,6 +37,14 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
                 throw CreateAndLogCriticalDependencyException(
                     failedArtistStorageException);
             }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsArtistException =
+                    new AlreadyExistsArtistException(duplicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(
+                    alreadyExistsArtistException);
+            }
         }
 
         private ArtistValidationException CreateAndLogValidationException(Xeption exception)
@@ -52,6 +61,16 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
             this.loggingBroker.LogCritical(artistDependencyException);
 
             return artistDependencyException;
+        }
+
+        private ArtistDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
+        {
+            var artistValidationDependencyException =
+                new ArtistDependencyValidationException(exception);
+
+            this.loggingBroker.LogError(artistValidationDependencyException);
+
+            return artistValidationDependencyException;
         }
     }
 }
