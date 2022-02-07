@@ -197,5 +197,50 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async void ShouldThrowServiceExceptionOnAddIfServiceErrorOccursAndLogItAsync()
+        {
+            //given
+            Artist someArtist = CreateRandomArtist();
+            var serviceException = new Exception();
+
+            var failedArtistServiceException =
+                new FailedArtistServiceException(serviceException);
+
+            var expectedArtistServiceException =
+                new ArtistServiceException(failedArtistServiceException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                .Throws(serviceException);
+
+            //when
+            ValueTask<Artist> addArtistTask =
+                this.artistService.AddArtistAsync(someArtist);
+
+            //then
+            await Assert.ThrowsAsync<ArtistServiceException>(() =>
+                addArtistTask.AsTask());
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedArtistServiceException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertArtistAsync(It.IsAny<Artist>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
+
+
