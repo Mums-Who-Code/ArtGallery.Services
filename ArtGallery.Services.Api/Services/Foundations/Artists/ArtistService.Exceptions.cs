@@ -45,6 +45,16 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
                 throw CreateAndLogDependencyValidationException(
                     alreadyExistsArtistException);
             }
+            catch(ForeignKeyConstraintConflictException
+                foreignForeignKeyConstraintConflictException)
+            {
+                var invalidArtistReferenceException =
+                    new InvalidArtistReferenceException(
+                        foreignForeignKeyConstraintConflictException);
+
+                throw CreateAndLogDependencyValidationException(
+                    invalidArtistReferenceException);
+            }
         }
 
         private ArtistValidationException CreateAndLogValidationException(Xeption exception)
