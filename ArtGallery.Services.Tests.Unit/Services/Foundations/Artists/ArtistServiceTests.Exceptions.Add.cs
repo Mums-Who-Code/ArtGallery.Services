@@ -242,5 +242,3 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
         }
     }
 }
-
-
