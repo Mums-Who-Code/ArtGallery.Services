@@ -10,7 +10,6 @@ using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using Xeptions;
 using Xunit;
 
 namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists

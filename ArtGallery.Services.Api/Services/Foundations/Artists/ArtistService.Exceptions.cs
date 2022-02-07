@@ -46,7 +46,7 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
                 throw CreateAndLogDependencyValidationException(
                     alreadyExistsArtistException);
             }
-            catch(ForeignKeyConstraintConflictException
+            catch (ForeignKeyConstraintConflictException
                 foreignForeignKeyConstraintConflictException)
             {
                 var invalidArtistReferenceException =
@@ -56,9 +56,9 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
                 throw CreateAndLogDependencyValidationException(
                     invalidArtistReferenceException);
             }
-            catch(DbUpdateException dbUpdateException)
+            catch (DbUpdateException dbUpdateException)
             {
-                var failedArtistStorageException = 
+                var failedArtistStorageException =
                     new FailedArtistStorageException(dbUpdateException);
 
                 throw CreateAndLogDependencyexception(
@@ -94,7 +94,7 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
 
         private ArtistDependencyException CreateAndLogDependencyexception(Xeption exception)
         {
-            var artistDependencyException = 
+            var artistDependencyException =
                 new ArtistDependencyException(exception);
 
             this.loggingBroker.LogError(artistDependencyException);
