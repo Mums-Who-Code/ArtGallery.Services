@@ -7,6 +7,7 @@ using ArtGallery.Services.Api.Models.Artists;
 using ArtGallery.Services.Api.Models.Artists.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace ArtGallery.Services.Api.Services.Foundations.Artists
@@ -55,6 +56,14 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
                 throw CreateAndLogDependencyValidationException(
                     invalidArtistReferenceException);
             }
+            catch(DbUpdateException dbUpdateException)
+            {
+                var failedArtistStorageException = 
+                    new FailedArtistStorageException(dbUpdateException);
+
+                throw CreateAndLogDependencyexception(
+                    failedArtistStorageException);
+            }
         }
 
         private ArtistValidationException CreateAndLogValidationException(Xeption exception)
@@ -81,6 +90,16 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
             this.loggingBroker.LogError(artistValidationDependencyException);
 
             return artistValidationDependencyException;
+        }
+
+        private ArtistDependencyException CreateAndLogDependencyexception(Xeption exception)
+        {
+            var artistDependencyException = 
+                new ArtistDependencyException(exception);
+
+            this.loggingBroker.LogError(artistDependencyException);
+
+            return artistDependencyException;
         }
     }
 }

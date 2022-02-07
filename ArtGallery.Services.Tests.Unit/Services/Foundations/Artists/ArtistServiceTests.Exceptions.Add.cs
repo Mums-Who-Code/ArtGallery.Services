@@ -167,7 +167,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             var expectedArtistDepdendencyException =
                 new ArtistDependencyException(
-                    failedStorageDependencyException.InnerException as Xeption);
+                    failedStorageDependencyException);
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
