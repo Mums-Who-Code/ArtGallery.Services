@@ -8,7 +8,9 @@ using ArtGallery.Services.Api.Models.Artists;
 using ArtGallery.Services.Api.Models.Artists.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Moq;
+using Xeptions;
 using Xunit;
 
 namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
@@ -145,6 +147,51 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertArtistAsync(alreadyExistsArtist),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async void ShouldThrowDependencyExceptionOnAddIfDatabaseUpdateErrorOccursAndLogItAsync()
+        {
+            // given
+            Artist someArtist = CreateRandomArtist();
+            string randomMessage = GetRandomString();
+            var databaseUpdateException = new DbUpdateException();
+
+            var failedStorageDependencyException =
+                new FailedArtistStorageException(databaseUpdateException);
+
+            var expectedArtistDepdendencyException =
+                new ArtistDependencyException(
+                    failedStorageDependencyException.InnerException as Xeption);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Throws(databaseUpdateException);
+
+            // when
+            ValueTask<Artist> addArtistTask =
+                this.artistService.AddArtistAsync(someArtist);
+
+            // then
+            await Assert.ThrowsAsync<ArtistDependencyException>(() =>
+                addArtistTask.AsTask());
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+               broker.LogError(It.Is(SameExceptionAs(
+                   expectedArtistDepdendencyException))),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertArtistAsync(someArtist),
                     Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
