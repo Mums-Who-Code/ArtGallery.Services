@@ -28,10 +28,10 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
                 (Rule: IsInvalid(artist.UpdatedDate), Parameter: nameof(Artist.UpdatedDate)),
 
                 (Rule: IsNotSame(
-                    firstId: artist.UpdatedBy,
-                    secondId: artist.CreatedBy,
-                    secondIdName: nameof(artist.CreatedBy)),
-                Parameter: nameof(Artist.UpdatedBy)),
+                    firstId: artist.CreatedBy,
+                    secondId: artist.UpdatedBy,
+                    secondIdName: nameof(artist.UpdatedBy)),
+                Parameter: nameof(Artist.CreatedBy)),
 
                 (Rule: IsNotSame(
                     firstDate: artist.CreatedDate,
