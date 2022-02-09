@@ -2,6 +2,7 @@
 // Copyright (c) MumsWhoCode. All rights reserved.
 // -----------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using ArtGallery.Services.Api.Models.Artists;
 using ArtGallery.Services.Api.Models.Artists.Exceptions;
@@ -64,6 +65,14 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
                 throw CreateAndLogDependencyexception(
                     failedArtistStorageException);
             }
+            catch (Exception serviceException)
+            {
+                var failedArtistServiceException =
+                    new FailedArtistServiceException(serviceException);
+
+                throw CreateAndLogServiceException(
+                    failedArtistServiceException);
+            }
         }
 
         private ArtistValidationException CreateAndLogValidationException(Xeption exception)
@@ -100,6 +109,14 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
             this.loggingBroker.LogError(artistDependencyException);
 
             return artistDependencyException;
+        }
+
+        private ArtistServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var artistServiceException = new ArtistServiceException(exception);
+            this.loggingBroker.LogError(artistServiceException);
+
+            return artistServiceException;
         }
     }
 }
