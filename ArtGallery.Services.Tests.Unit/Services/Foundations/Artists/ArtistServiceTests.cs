@@ -117,7 +117,8 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
         {
             return actualException =>
                 actualException.Message == expectedException.Message
-                && actualException.InnerException.Message == expectedException.InnerException.Message;
+                && actualException.InnerException.Message == expectedException.InnerException.Message
+                && (actualException.InnerException as Xeption).DataEquals(expectedException.InnerException.Data);
         }
 
         private static Filler<Artist> CreateArtistFiller(DateTimeOffset dateTime)
@@ -126,13 +127,13 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             Guid userId = Guid.NewGuid();
 
             filler.Setup()
+                .OnType<Guid>().Use(userId)
+                .OnType<DateTimeOffset>().Use(dateTime)
                 .OnProperty(artist => artist.Email).Use(GetRandomEmail())
                 .OnProperty(artist => artist.ContactNumber).Use(GetRandomContactNumber())
                 .OnProperty(artist => artist.Status).Use(ArtistStatus.Active)
-                .OnType<Guid>().Use(userId)
                 .OnProperty(artist => artist.CreatedByUser).IgnoreIt()
-                .OnProperty(artist => artist.UpdatedByUser).IgnoreIt()
-                .OnType<DateTimeOffset>().Use(dateTime);
+                .OnProperty(artist => artist.UpdatedByUser).IgnoreIt();
 
             return filler;
         }

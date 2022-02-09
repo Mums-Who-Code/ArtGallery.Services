@@ -93,9 +93,7 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
 
         private ArtistDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
         {
-            var artistValidationDependencyException =
-                new ArtistDependencyValidationException(exception);
-
+            var artistValidationDependencyException = new ArtistDependencyValidationException(exception);
             this.loggingBroker.LogError(artistValidationDependencyException);
 
             return artistValidationDependencyException;
@@ -103,9 +101,7 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
 
         private ArtistDependencyException CreateAndLogDependencyexception(Xeption exception)
         {
-            var artistDependencyException =
-                new ArtistDependencyException(exception);
-
+            var artistDependencyException = new ArtistDependencyException(exception);
             this.loggingBroker.LogError(artistDependencyException);
 
             return artistDependencyException;

@@ -27,6 +27,7 @@ namespace ArtGallery.Services.Api
             services.AddControllers();
             services.AddLogging();
             AddBrokers(services);
+            AddServices(services);
 
             services.AddSwaggerGen(options =>
             {

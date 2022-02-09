@@ -31,7 +31,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
-                .Throws(sqlException);
+                    .Throws(sqlException);
 
             //when
             ValueTask<Artist> addArtistTask =
@@ -43,7 +43,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTime(),
-                    Times.Once);
+                        Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(
@@ -52,7 +52,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertArtistAsync(It.IsAny<Artist>()),
-                    Times.Never);
+                        Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
@@ -63,8 +63,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
         public async void ShouldThrowDependencyValidationExceptionOnAddIfArtistAlreadyExistsAndLogItAsync()
         {
             // given
-            DateTimeOffset dateTime = GetRandomDateTime();
-            Artist randomArtist = CreateRandomArtist(dateTime);
+            Artist randomArtist = CreateRandomArtist();
             Artist alreadyExistsArtist = randomArtist;
             string randomMessage = GetRandomString();
             string exceptionMessage = randomMessage;
@@ -93,7 +92,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
-               broker.LogError(It.Is(SameExceptionAs(
+                broker.LogError(It.Is(SameExceptionAs(
                    expectedArtistDepdendencyValidationException))),
                     Times.Once);
 
@@ -185,7 +184,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
-               broker.LogError(It.Is(SameExceptionAs(
+                broker.LogError(It.Is(SameExceptionAs(
                    expectedArtistDepdendencyException))),
                     Times.Once);
 
@@ -213,7 +212,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
-                .Throws(serviceException);
+                    .Throws(serviceException);
 
             //when
             ValueTask<Artist> addArtistTask =

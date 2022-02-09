@@ -19,14 +19,13 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
         {
             //given
             DateTimeOffset randomDateTime = GetRandomDateTime();
-
             Artist randomArtist = CreateRandomArtist(randomDateTime);
             Artist inputArtist = randomArtist;
             Artist persistedArtist = inputArtist;
             Artist expectedArtist = persistedArtist.DeepClone();
 
             this.dateTimeBrokerMock.Setup(broker =>
-               broker.GetCurrentDateTime())
+                broker.GetCurrentDateTime())
                    .Returns(randomDateTime);
 
             this.storageBrokerMock.Setup(broker =>
@@ -50,6 +49,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }

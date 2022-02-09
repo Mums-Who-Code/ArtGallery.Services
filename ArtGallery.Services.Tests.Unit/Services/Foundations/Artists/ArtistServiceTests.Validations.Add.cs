@@ -42,6 +42,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
 
         [Theory]
@@ -111,22 +112,22 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertArtistAsync(It.IsAny<Artist>()),
-                    Times.Never);
+                        Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
 
         [Theory]
         [MemberData(nameof(InvalidEmails))]
         public async Task ShouldThrowValidationExceptionOnAddIfEmailIsInvalidAndLogItAsync(
-            string invalideEmail)
+            string invalidEmail)
         {
             //given
             Artist randomArtist = CreateRandomArtist();
             Artist invalidArtist = randomArtist;
-            invalidArtist.Email = invalideEmail;
-
+            invalidArtist.Email = invalidEmail;
             var invalidArtistException = new InvalidArtistException();
 
             invalidArtistException.AddData(
@@ -151,10 +152,11 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertArtistAsync(It.IsAny<Artist>()),
-                    Times.Never);
+                        Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
 
         [Theory]
@@ -166,7 +168,6 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             Artist randomArtist = CreateRandomArtist();
             Artist invalidArtist = randomArtist;
             invalidArtist.ContactNumber = invalidContactNumber;
-
             var invalidArtistException = new InvalidArtistException();
 
             invalidArtistException.AddData(
@@ -191,10 +192,11 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertArtistAsync(It.IsAny<Artist>()),
-                    Times.Never);
+                        Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -204,7 +206,6 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             Artist randomArtist = CreateRandomArtist();
             Artist invalidArtist = randomArtist;
             invalidArtist.CreatedBy = Guid.NewGuid();
-
             var invalidArtistException = new InvalidArtistException();
 
             invalidArtistException.AddData(
@@ -229,10 +230,11 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertArtistAsync(It.IsAny<Artist>()),
-                    Times.Never);
+                        Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -242,7 +244,6 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             Artist randomArtist = CreateRandomArtist();
             Artist invalidArtist = randomArtist;
             invalidArtist.UpdatedDate = invalidArtist.CreatedDate.AddDays(1);
-
             var invalidArtistException = new InvalidArtistException();
 
             invalidArtistException.AddData(
@@ -267,10 +268,11 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertArtistAsync(It.IsAny<Artist>()),
-                    Times.Never);
+                        Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
 
         [Theory]
@@ -313,7 +315,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTime(),
-                    Times.Once);
+                        Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
@@ -322,7 +324,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertArtistAsync(It.IsAny<Artist>()),
-                    Times.Never);
+                        Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

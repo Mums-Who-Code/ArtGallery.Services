@@ -19,7 +19,6 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
                 (Rule: IsInvalid(artist.Id), Parameter: nameof(Artist.Id)),
                 (Rule: IsInvalid(text: artist.FirstName), Parameter: nameof(Artist.FirstName)),
                 (Rule: IsInvalid(text: artist.LastName), Parameter: nameof(Artist.LastName)),
-                (Rule: IsInvalid(text: artist.Email), Parameter: nameof(Artist.Email)),
                 (Rule: IsInvalidEmail(emailAddress: artist.Email), Parameter: nameof(Artist.Email)),
                 (Rule: IsInvalidContactNumber(artist.ContactNumber), Parameter: nameof(Artist.ContactNumber)),
                 (Rule: IsInvalid(artist.Status), Parameter: nameof(Artist.Status)),
@@ -40,7 +39,7 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
                     secondDateName: nameof(Artist.UpdatedDate)),
                 Parameter: nameof(Artist.CreatedDate)),
 
-                 (Rule: IsNotRecent(artist.CreatedDate), Parameter: nameof(Artist.CreatedDate)));
+                (Rule: IsNotRecent(artist.CreatedDate), Parameter: nameof(Artist.CreatedDate)));
         }
 
         private static void ValidateArtistIsNotNull(Artist artist)
@@ -49,20 +48,18 @@ namespace ArtGallery.Services.Api.Services.Foundations.Artists
             {
                 throw new NullArtistException();
             }
-            else
-                return;
         }
 
         private static dynamic IsInvalid(Guid id) => new
         {
             Condition = id == Guid.Empty,
-            Message = "Id is required"
+            Message = "Id is required."
         };
 
         private static dynamic IsInvalid(string text) => new
         {
             Condition = String.IsNullOrWhiteSpace(text),
-            Message = "Text is required"
+            Message = "Text is required."
         };
 
         private static dynamic IsInvalid(ArtistStatus status) => new
