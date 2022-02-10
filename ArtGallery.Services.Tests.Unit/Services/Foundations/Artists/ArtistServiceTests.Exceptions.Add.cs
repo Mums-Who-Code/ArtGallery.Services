@@ -111,8 +111,8 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             //given
             Artist randomArtist = CreateRandomArtist();
             Artist alreadyExistsArtist = randomArtist;
-            String randomMessage = GetRandomMessage();
-            String exceptionMessage = randomMessage;
+            string randomMessage = GetRandomMessage();
+            string exceptionMessage = randomMessage;
 
             var foreignKeyConstraintConflictException =
                 new ForeignKeyConstraintConflictException(exceptionMessage);
