@@ -42,6 +42,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
 
         [Theory]
