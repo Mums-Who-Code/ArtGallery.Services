@@ -10,7 +10,7 @@ namespace ArtGallery.Services.Api.Models.Artists.Exceptions
     public class FailedArtistStorageException : Xeption
     {
         public FailedArtistStorageException(Exception innerException)
-            : base(message: "Failed Artist Storage error occured.", innerException)
+            : base(message: "Failed artist storage error occured.", innerException)
         { }
     }
 }

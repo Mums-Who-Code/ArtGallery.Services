@@ -32,8 +32,8 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
                 addArtistTask.AsTask());
 
             this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(It.Is(
-                    SameExceptionAs(expectedArtistValidationException))),
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedArtistValidationException))),
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>

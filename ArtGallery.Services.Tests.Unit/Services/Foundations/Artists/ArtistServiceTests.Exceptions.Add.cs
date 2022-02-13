@@ -20,7 +20,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
         public async Task ShouldThrowCriticalDependencyExceptionOnAddIfSqlErrorOccursAndLogItAsync()
         {
             //given
-            Artist randomArtist = CreateRandomArtist();
+            Artist someArtist = CreateRandomArtist();
             SqlException sqlException = GetSqlException();
 
             var failedArtistStorageException =
@@ -35,7 +35,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
 
             //when
             ValueTask<Artist> addArtistTask =
-                this.artistService.AddArtistAsync(randomArtist);
+                this.artistService.AddArtistAsync(someArtist);
 
             //then
             await Assert.ThrowsAsync<ArtistDependencyException>(() =>
@@ -140,8 +140,9 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(It.Is(SameExceptionAs(expectedArtistDepdendencyValidationException))),
-                    Times.Once);
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedArtistDepdendencyValidationException))),
+                        Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertArtistAsync(alreadyExistsArtist),
@@ -160,12 +161,12 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             string randomMessage = GetRandomString();
             var databaseUpdateException = new DbUpdateException();
 
-            var failedStorageDependencyException =
+            var failedArtistStorageException =
                 new FailedArtistStorageException(databaseUpdateException);
 
             var expectedArtistDepdendencyException =
                 new ArtistDependencyException(
-                    failedStorageDependencyException);
+                    failedArtistStorageException);
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
