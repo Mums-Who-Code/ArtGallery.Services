@@ -5,6 +5,7 @@
 using ArtGallery.Services.Api.Brokers.DateTime;
 using ArtGallery.Services.Api.Brokers.Loggings;
 using ArtGallery.Services.Api.Brokers.Storages;
+using ArtGallery.Services.Api.Services.Foundations.Artists;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,7 @@ namespace ArtGallery.Services.Api
             services.AddControllers();
             services.AddLogging();
             AddBrokers(services);
+            AddServices(services);
 
             services.AddSwaggerGen(options =>
             {
@@ -64,9 +66,12 @@ namespace ArtGallery.Services.Api
 
         private static void AddBrokers(IServiceCollection services)
         {
+            services.AddTransient<IStorageBroker, StorageBroker>();
             services.AddTransient<IDateTimeBroker, DateTimeBroker>();
             services.AddTransient<ILoggingBroker, LoggingBroker>();
-            services.AddTransient<IStorageBroker, StorageBroker>();
         }
+
+        private static void AddServices(IServiceCollection services) =>
+            services.AddTransient<IArtistService, ArtistService>();
     }
 }
