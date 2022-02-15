@@ -71,9 +71,7 @@ namespace ArtGallery.Services.Api
             services.AddTransient<ILoggingBroker, LoggingBroker>();
         }
 
-        private static void AddServices(IServiceCollection services)
-        {
+        private static void AddServices(IServiceCollection services) =>
             services.AddTransient<IArtistService, ArtistService>();
-        }
     }
 }

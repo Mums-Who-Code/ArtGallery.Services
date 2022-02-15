@@ -94,7 +94,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                    expectedArtistDepdendencyValidationException))),
-                    Times.Once);
+                        Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertArtistAsync(alreadyExistsArtist),
@@ -187,7 +187,7 @@ namespace ArtGallery.Services.Tests.Unit.Services.Foundations.Artists
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                    expectedArtistDepdendencyException))),
-                    Times.Once);
+                        Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertArtistAsync(someArtist),
