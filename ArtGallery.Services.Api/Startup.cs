@@ -26,6 +26,7 @@ namespace ArtGallery.Services.Api
         {
             services.AddControllers();
             services.AddLogging();
+            services.AddDbContext<StorageBroker>();
             AddBrokers(services);
             AddServices(services);
 
